@@ -1,12 +1,13 @@
 package com.typesafe.sbt.bundle
 
+import com.typesafe.service.sbt.LagomJava
 import sbt._
 
 object LagomBundle extends AutoPlugin {
 
   import SbtBundle.autoImport._
 
-  override def `requires` = SbtBundle
+  override def requires = SbtBundle && LagomJava
 
   override def trigger = allRequirements
 
