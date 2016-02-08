@@ -1,8 +1,6 @@
 import scalariform.formatter.preferences._
 import bintray.Keys._
 
-sbtPlugin := true
-
 organization := "com.typesafe.sbt"
 name := "sbt-lagom-bundle"
 
@@ -15,6 +13,13 @@ scalacOptions ++= List(
   "-encoding", "UTF-8"
 )
 
+lazy val sbtLagomBundle = project.in(file("."))
+
+addSbtPlugin(Library.sbtBundle)
+addSbtPlugin(Library.sbtLagom)
+
+libraryDependencies += Library.playJson
+
 scalariformSettings
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignSingleLineCaseStatements, true)
@@ -22,17 +27,16 @@ ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(DoubleIndentClassDeclaration, true)
   .setPreference(PreserveDanglingCloseParenthesis, true)
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-bundle" % "1.2.1")
-addSbtPlugin("com.typesafe.rsp" % "sbt-plugin" % "0.1.0-SNAPSHOT")
-
 releaseSettings
 ReleaseKeys.versionBump := sbtrelease.Version.Bump.Minor
+
+sbtPlugin := true
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 publishMavenStyle := false
 bintrayPublishSettings
 repository in bintray := "sbt-plugins"
-bintrayOrganization in bintray := Some("sbt-bundle")
+bintrayOrganization in bintray := Some("sbt-lagom-bundle")
 
 scriptedSettings
 scriptedLaunchOpts <+= version apply { v => s"-Dproject.version=$v" }
