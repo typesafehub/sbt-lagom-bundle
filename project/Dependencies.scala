@@ -10,7 +10,7 @@ object Version {
 }
 
 object Library {
-  val sbtLagom               = "com.newco.lagom"       %  "lagom-sbt-plugin"            % Version.lagom
+  val sbtLagom               = "com.lightbend.lagom"   %  "lagom-sbt-plugin"            % Version.lagom
   val sbtBundle              = "com.typesafe.sbt"      %  "sbt-bundle"                  % Version.sbtBundle
   val playJson               = "com.typesafe.play"     %% "play-json"                   % Version.play
 }
