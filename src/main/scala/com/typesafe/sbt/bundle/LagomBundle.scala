@@ -37,7 +37,7 @@ object LagomBundle extends AutoPlugin {
       ivyConfigurations += apiToolsConfig,
       // scalaBinaryVersion.value uses the binary compatible scala version from the Lagom project
       libraryDependencies ++= Seq(
-        "com.newco.lagom"       % s"api-tools_${scalaBinaryVersion.value}" % "0.1.0-SNAPSHOT" % apiToolsConfig,
+        "com.lightbend.lagom"   % s"api-tools_${scalaBinaryVersion.value}" % "0.1.0-SNAPSHOT" % apiToolsConfig,
         // TODO: Use conductr-lib 1.3.1 once released
         "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % "1.3.1-SNAPSHOT"
       ),
