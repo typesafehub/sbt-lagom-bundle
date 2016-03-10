@@ -2,8 +2,7 @@ import sbt._
 import sbt.Resolver.bintrayRepo
 
 object Version {
-  // TODO: Use non SNAPSHOT version once Lagom published
-  val lagom             = "0.1.0-SNAPSHOT"
+  val lagom             = "1.0.0-M1"
   val sbtBundle         = "1.3.1"
   val play              = "2.3.10" // Using Play 2.3 to ensure compatibility with sbt-conductr
   val scala             = "2.10.6"
