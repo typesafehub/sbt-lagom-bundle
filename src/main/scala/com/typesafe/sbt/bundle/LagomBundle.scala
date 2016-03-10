@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException
 import scala.collection.JavaConverters._
 import java.util.jar.{JarEntry, JarFile}
 import java.io.InputStream
-import com.lightbend.lagom.sbt.LagomJava
+import com.lightbend.lagom.sbt.{LagomImport, LagomJava}
 import com.typesafe.sbt.SbtNativePackager
 import sbt._
 import sbt.Keys._
@@ -39,7 +39,7 @@ object LagomBundle extends AutoPlugin {
       // scalaBinaryVersion.value uses the binary compatible scala version from the Lagom project
       conductrBundleLibVersion := "1.4.0",
       libraryDependencies ++= Seq(
-        "com.lightbend.lagom"   % s"api-tools_${scalaBinaryVersion.value}" % "0.1.0-SNAPSHOT" % apiToolsConfig,
+        LagomImport.component("api-tools") % apiToolsConfig,
         "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % conductrBundleLibVersion.value
       ),
       resolvers += bintrayRepo("typesafe", "maven-releases"),
