@@ -36,10 +36,10 @@ object LagomBundle extends AutoPlugin {
       endpointsPort := 9000,
       ivyConfigurations += apiToolsConfig,
       // scalaBinaryVersion.value uses the binary compatible scala version from the Lagom project
+      conductrBundleLibVersion := "1.4.0",
       libraryDependencies ++= Seq(
         "com.lightbend.lagom"   % s"api-tools_${scalaBinaryVersion.value}" % "0.1.0-SNAPSHOT" % apiToolsConfig,
-        // TODO: Use conductr-lib 1.3.1 once released
-        "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % "1.3.1-SNAPSHOT"
+        "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % conductrBundleLibVersion.value
       ),
       play.sbt.PlaySettings.manageClasspath(apiToolsConfig)
     )
