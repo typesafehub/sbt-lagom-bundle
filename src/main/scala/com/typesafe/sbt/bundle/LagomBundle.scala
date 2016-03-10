@@ -11,6 +11,7 @@ import sbt.Keys._
 import play.api.libs.json._
 import scala.reflect.ClassTag
 import scala.util.{Success, Failure, Try}
+import sbt.Resolver.bintrayRepo
 
 object LagomBundle extends AutoPlugin {
 
@@ -41,6 +42,7 @@ object LagomBundle extends AutoPlugin {
         "com.lightbend.lagom"   % s"api-tools_${scalaBinaryVersion.value}" % "0.1.0-SNAPSHOT" % apiToolsConfig,
         "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % conductrBundleLibVersion.value
       ),
+      resolvers += bintrayRepo("typesafe", "maven-releases"),
       play.sbt.PlaySettings.manageClasspath(apiToolsConfig)
     )
 
