@@ -31,7 +31,7 @@ checkBundleConf := {
                                    |  "frontend" = {
                                    |    bind-protocol = "http"
                                    |    bind-port     = 0
-                                   |    services      = ["http://:9000/frontend"]
+                                   |    services      = ["http://:9000/frontend?preservePath"]
                                    |  },
                                    |  "akka-remote" = {
                                    |    bind-protocol = "tcp"
@@ -47,7 +47,7 @@ checkBundleConf := {
                                   |  "backend" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000/backend"]
+                                  |    services      = ["http://:9000/backend?preservePath"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"

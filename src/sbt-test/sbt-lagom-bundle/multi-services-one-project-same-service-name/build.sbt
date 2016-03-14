@@ -24,7 +24,7 @@ checkBundleConf := {
                                   |  "payment" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000/payment"]
+                                  |    services      = ["http://:9000/payment?preservePath"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"
