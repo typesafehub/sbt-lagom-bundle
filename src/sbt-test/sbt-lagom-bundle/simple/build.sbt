@@ -23,7 +23,7 @@ checkBundleConf := {
                            |  "fooservice" = {
                            |    bind-protocol = "http"
                            |    bind-port     = 0
-                           |    services      = ["http://:9000/fooservice?preservePath"]
+                           |    services      = ["http://:9000/fooservice"]
                            |  },
                            |  "akka-remote" = {
                            |    bind-protocol = "tcp"

@@ -31,12 +31,12 @@ checkBundleConf := {
                                   |  "debit" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000/debit?preservePath"]
+                                  |    services      = ["http://:9000/debit"]
                                   |  },
                                   |  "credit" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000/credit?preservePath"]
+                                  |    services      = ["http://:9000/credit"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"
@@ -51,7 +51,7 @@ checkBundleConf := {
                                  |  "social/feed" = {
                                  |    bind-protocol = "http"
                                  |    bind-port     = 0
-                                 |    services      = ["http://:9000/social/feed?preservePath"]
+                                 |    services      = ["http://:9000/social/feed"]
                                  |  },
                                  |  "akka-remote" = {
                                  |    bind-protocol = "tcp"
