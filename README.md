@@ -26,7 +26,7 @@ The declared descriptor names are automatically extracted from the Lagom service
 
 ## Settings
 
-The following settings are available:
+The following settings are available via `LagomBundleKeys`:
 
 Setting                  | Description
 -------------------------|------------
