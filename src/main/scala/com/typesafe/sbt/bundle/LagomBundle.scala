@@ -195,7 +195,7 @@ object LagomBundle extends AutoPlugin {
       case name if name.startsWith("/") => name.drop(1) // TODO: The drop will not be necessary anymore once Lagom verifies the service name
       case name => name
     }
-    formattedServiceNames.map(name => name -> Endpoint("http", 0, Set(URI(s"http://:$servicePort/$name?preservePath")))).toMap
+    formattedServiceNames.map(name => name -> Endpoint("http", 0, Set(URI(s"http://:$servicePort/$name")))).toMap
   }
 
   private def envName(name: String) =
