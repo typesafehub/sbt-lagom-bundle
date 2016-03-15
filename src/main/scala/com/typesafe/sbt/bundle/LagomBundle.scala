@@ -68,7 +68,7 @@ object LagomBundle extends AutoPlugin {
             )).toSeq.flatten
           // The application secret is not used by the Lagom project so the value doesn't really matter.
           // Therefore it is save to automatically generate one here. It is necessary though to set the key in prod mode.
-          val applicationSecret = s"-Dplay.crypto.secret=${SbtBundle.hash(s"${name.value}-${version}")}"
+          val applicationSecret = s"-Dplay.crypto.secret=${SbtBundle.hash(s"${name.value}-$version")}"
           bindings :+ applicationSecret
         }
       )
@@ -126,7 +126,7 @@ object LagomBundle extends AutoPlugin {
   private def copyDirectoryFromJar(fromJarFile: JarFile, targetDir: File, dirPrefix: String): Unit = {
     fromJarFile.entries.asScala.foreach { entry =>
       if(entry.getName.startsWith(dirPrefix) && !entry.isDirectory) {
-        val name = entry.getName.drop(dirPrefix.size)
+        val name = entry.getName.drop(dirPrefix.length)
         val toFile = targetDir / name
         withJarInputStream(fromJarFile, entry) { in =>
           IO.transfer(in, toFile)
@@ -185,17 +185,50 @@ object LagomBundle extends AutoPlugin {
   private def toClasspathUrls(attributedFiles: Seq[Attributed[File]]): Array[URL] =
     attributedFiles.files.map(_.toURI.toURL).toArray
 
+  private val pathBeginExtractor = """^\\Q(/.*)\\E.*""".r
+
   /**
     * Convert services string to `Map[String, Endpoint]` by using the Play json library
     */
   private def toConductrEndpoints(services: String, servicePort: Int): Map[String, Endpoint] = {
+    def toEndpoint(serviceNameAndPath: (String, Seq[String])): (String, Endpoint) =
+      serviceNameAndPath match {
+        case (serviceName, pathBegins) =>
+          val uris = pathBegins.map(p => URI(s"http://:$servicePort$p")).toSet
+          serviceName -> Endpoint("http", services = uris)
+      }
+    def mergeEndpoint(endpoints: Map[String, Endpoint], endpoint: (String, Endpoint)): Map[String, Endpoint] =
+      endpoint match {
+        case (serviceName, endpoint) =>
+          val mergedEndpoint =
+            endpoints.get(serviceName)
+              .fold(endpoint) { prevEndpoint =>
+                val mergedServices = (prevEndpoint.services, endpoint.services) match {
+                  case (Some(prevServices), Some(newServices)) => Some(prevServices ++ newServices)
+                  case (Some(prevServices), None)              => Some(prevServices)
+                  case (None              , Some(newServices)) => Some(newServices)
+                  case (None              , None)              => None
+                }
+                prevEndpoint.copy(services = mergedServices)
+              }
+          endpoints + (serviceName -> mergedEndpoint)
+      }
+
     val json = Json.parse(services)
-    val serviceNames = (json \\ "name").flatMap(_.asOpt[String])
-    val formattedServiceNames = serviceNames.map {
-      case name if name.startsWith("/") => name.drop(1) // TODO: The drop will not be necessary anymore once Lagom verifies the service name
-      case name => name
+    val serviceNamesAndPaths = json.as[List[JsObject]].map { o =>
+      val serviceName = (o \ "name").as[String]
+      val pathlessServiceName = if (serviceName.startsWith("/")) serviceName.drop(1) else serviceName
+      val pathBegins = (o \ "acls" \\ "pathPattern")
+        .map(_.as[String])
+        .collect {
+          case pathBeginExtractor(pathBegin) =>
+            (if (pathBegin.endsWith("/")) pathBegin.dropRight(1) else pathBegin) + "?preservePath"
+        }
+      pathlessServiceName -> pathBegins
     }
-    formattedServiceNames.map(name => name -> Endpoint("http", 0, Set(URI(s"http://:$servicePort/$name")))).toMap
+    serviceNamesAndPaths
+      .map(toEndpoint)
+      .foldLeft(Map.empty[String, Endpoint])(mergeEndpoint)
   }
 
   private def envName(name: String) =
@@ -221,7 +254,7 @@ private object ServiceDetector {
   def services(classLoader: ClassLoader): String =
     withContextClassloader(classLoader) { loader =>
       getSingletonObject[ServiceDetector](loader, "com.lightbend.lagom.internal.api.tools.ServiceDetector$") match {
-        case Failure(t) => fail(s"Endpoints can not be resolved from Lagom project. Error: ${t.getMessage}")
+        case Failure(t)               => fail(s"Endpoints can not be resolved from Lagom project. Error: ${t.getMessage}")
         case Success(serviceDetector) => serviceDetector.services(loader)
       }
     }
@@ -230,7 +263,7 @@ private object ServiceDetector {
     * Uses the given class loader for the given code block
     */
   private def withContextClassloader[T](loader: ClassLoader)(body: ClassLoader => T): T = {
-    val current = Thread.currentThread().getContextClassLoader()
+    val current = Thread.currentThread().getContextClassLoader
     try {
       Thread.currentThread().setContextClassLoader(loader)
       body(loader)
