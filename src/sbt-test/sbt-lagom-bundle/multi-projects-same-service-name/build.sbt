@@ -26,12 +26,12 @@ checkBundleConf := {
     def indent: String = s.replaceAll("  ", "")
   }
 
-  val creditContent = IO.read((target in debitImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
+  val creditContent = IO.read((target in creditImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedCreditContent = """|endpoints = {
                                  |  "payment" = {
                                  |    bind-protocol = "http"
                                  |    bind-port     = 0
-                                 |    services      = ["http://:9000/payment"]
+                                 |    services      = ["http://:9000/credit?preservePath"]
                                  |  },
                                  |  "akka-remote" = {
                                  |    bind-protocol = "tcp"
@@ -41,12 +41,12 @@ checkBundleConf := {
                                  |}""".stripMargin.indent
   creditContent should include (expectedCreditContent)
 
-  val debitContent = IO.read((target in creditImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
+  val debitContent = IO.read((target in debitImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedDebitContent = """|endpoints = {
                                 |  "payment" = {
                                 |    bind-protocol = "http"
                                 |    bind-port     = 0
-                                |    services      = ["http://:9000/payment"]
+                                |    services      = ["http://:9000/debit?preservePath"]
                                 |  },
                                 |  "akka-remote" = {
                                 |    bind-protocol = "tcp"
