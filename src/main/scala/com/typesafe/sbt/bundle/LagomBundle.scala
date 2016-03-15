@@ -185,7 +185,14 @@ object LagomBundle extends AutoPlugin {
   private def toClasspathUrls(attributedFiles: Seq[Attributed[File]]): Array[URL] =
     attributedFiles.files.map(_.toURI.toURL).toArray
 
-  private val pathBeginExtractor = """^\\Q(/.*)\\E.*""".r
+  // Matches strings that starts with sequence escaping, e.g. \Q/api/users/:id\E
+  // The first sequence escaped substring that starts with a '/' is extracted as a variable
+  // Examples:
+  // /api/users                         => false
+  // \Q/api/users\E                     => true, variable = /api/users
+  // \Q/api/users/\E([^/]+)             => true, variable = /api/users/
+  // \Q/api/users/\E([^/]+)\Q/friends\E => true, variable = /api/users/
+  private val pathBeginExtractor = """^\\Q(/.+?)\\E.*""".r
 
   /**
     * Convert services string to `Map[String, Endpoint]` by using the Play json library
