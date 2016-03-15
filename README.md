@@ -1,5 +1,7 @@
 # Lagom Bundle Plugin
 
+[![Build Status](https://api.travis-ci.org/typesafehub/sbt-lagom-bundle.png?branch=master)](https://travis-ci.org/typesafehub/sbt-lagom-bundle)
+
 ## Introduction
 
 A plugin that uses [sbt-bundle](https://github.com/sbt/sbt-bundle) to produce a ConductR bundle for Lagom.
