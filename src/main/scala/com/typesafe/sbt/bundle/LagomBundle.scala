@@ -9,6 +9,7 @@ import com.typesafe.sbt.SbtNativePackager
 import sbt._
 import sbt.Keys._
 import play.api.libs.json._
+import scala.collection.immutable.ListSet
 import scala.reflect.ClassTag
 import scala.util.{Success, Failure, Try}
 import sbt.Resolver.bintrayRepo
@@ -202,8 +203,8 @@ object LagomBundle extends AutoPlugin {
     def toEndpoint(serviceNameAndPath: (String, Seq[String])): (String, Endpoint) =
       serviceNameAndPath match {
         case (serviceName, pathBegins) =>
-          val uris = pathBegins.map(p => URI(s"http://:$servicePort$p")).toSet
-          serviceName -> Endpoint("http", services = uris)
+          val uris = pathBegins.map(p => URI(s"http://:$servicePort$p")).to[ListSet] // ListSet makes it easier to test
+          serviceName -> Endpoint("http", services = uris + URI(s"http://:$servicePort/$serviceName") )
       }
     def mergeEndpoint(endpoints: Map[String, Endpoint], endpoint: (String, Endpoint)): Map[String, Endpoint] =
       endpoint match {

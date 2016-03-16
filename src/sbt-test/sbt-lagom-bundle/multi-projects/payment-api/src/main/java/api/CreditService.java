@@ -15,7 +15,7 @@ public interface CreditService extends Service {
 
   @Override
   default Descriptor descriptor() {
-    return named("/credit").with(
+    return named("/creditservice").with(
       restCall(Method.GET,  "/", credit())
     ).withAutoAcl(true);
   }

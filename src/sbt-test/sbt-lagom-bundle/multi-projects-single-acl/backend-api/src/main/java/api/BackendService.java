@@ -15,7 +15,7 @@ public interface BackendService extends Service {
 
   @Override
   default Descriptor descriptor() {
-    return named("/backend").with(
+    return named("backendservice").with(
       restCall(Method.GET,  "/bar", bar())
     );
   }

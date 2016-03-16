@@ -28,15 +28,15 @@ checkBundleConf := {
 
   val paymentContent = IO.read((target in paymentImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedPaymentContent = """|endpoints = {
-                                  |  "debit" = {
+                                  |  "debitservice" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000?preservePath"]
+                                  |    services      = ["http://:9000/debitservice", "http://:9000?preservePath"]
                                   |  },
-                                  |  "credit" = {
+                                  |  "creditservice" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000?preservePath"]
+                                  |    services      = ["http://:9000/creditservice", "http://:9000?preservePath"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"
@@ -48,10 +48,10 @@ checkBundleConf := {
 
   val socialContent = IO.read((target in socialImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedSocialContent = """|endpoints = {
-                                 |  "social/feed" = {
+                                 |  "socialservice" = {
                                  |    bind-protocol = "http"
                                  |    bind-port     = 0
-                                 |    services      = ["http://:9000?preservePath"]
+                                 |    services      = ["http://:9000/socialservice", "http://:9000?preservePath"]
                                  |  },
                                  |  "akka-remote" = {
                                  |    bind-protocol = "tcp"

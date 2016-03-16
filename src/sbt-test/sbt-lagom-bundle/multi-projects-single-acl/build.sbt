@@ -28,10 +28,10 @@ checkBundleConf := {
 
   val frontendContent = IO.read((target in frontendImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedFrontendContent = """|endpoints = {
-                                   |  "frontend" = {
+                                   |  "frontendservice" = {
                                    |    bind-protocol = "http"
                                    |    bind-port     = 0
-                                   |    services      = ["http://:9000/foo?preservePath"]
+                                   |    services      = ["http://:9000/frontendservice", "http://:9000/foo?preservePath"]
                                    |  },
                                    |  "akka-remote" = {
                                    |    bind-protocol = "tcp"
@@ -44,10 +44,10 @@ checkBundleConf := {
   // Acls are not enabled for the backend. As a result the service is still written to the bundle.conf
   val backendContent = IO.read((target in backendImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedBackendContent = """|endpoints = {
-                                  |  "backend" = {
+                                  |  "backendservice" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = []
+                                  |    services      = ["http://:9000/backendservice"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"
