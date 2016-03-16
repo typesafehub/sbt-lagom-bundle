@@ -20,11 +20,11 @@ checkBundleConf := {
   }
 
   val paymentContent = IO.read((target in paymentImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
-  val expectedPaymentContent1 = """|endpoints = {
-                                  |  "payment" = {
+  val expectedPaymentContent = """|endpoints = {
+                                  |  "paymentservice" = {
                                   |    bind-protocol = "http"
                                   |    bind-port     = 0
-                                  |    services      = ["http://:9000/debit?preservePath", "http://:9000/credit?preservePath"]
+                                  |    services      = ["http://:9000/credit?preservePath", "http://:9000/paymentservice", "http://:9000/debit?preservePath"]
                                   |  },
                                   |  "akka-remote" = {
                                   |    bind-protocol = "tcp"
@@ -32,17 +32,5 @@ checkBundleConf := {
                                   |    services= []
                                   |  }
                                   |}""".stripMargin.indent
-  val expectedPaymentContent2 = """|endpoints = {
-                                  |  "payment" = {
-                                  |    bind-protocol = "http"
-                                  |    bind-port     = 0
-                                  |    services      = ["http://:9000/credit?preservePath", "http://:9000/debit?preservePath"]
-                                  |  },
-                                  |  "akka-remote" = {
-                                  |    bind-protocol = "tcp"
-                                  |    bind-port = 0
-                                  |    services= []
-                                  |  }
-                                  |}""".stripMargin.indent
-  paymentContent should (include (expectedPaymentContent1) or include (expectedPaymentContent2))
+  paymentContent should include (expectedPaymentContent)
 }

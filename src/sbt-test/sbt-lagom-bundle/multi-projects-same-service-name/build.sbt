@@ -28,10 +28,10 @@ checkBundleConf := {
 
   val creditContent = IO.read((target in creditImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedCreditContent = """|endpoints = {
-                                 |  "payment" = {
+                                 |  "creditservice" = {
                                  |    bind-protocol = "http"
                                  |    bind-port     = 0
-                                 |    services      = ["http://:9000/credit?preservePath"]
+                                 |    services      = ["http://:9000/creditservice", "http://:9000/credit?preservePath"]
                                  |  },
                                  |  "akka-remote" = {
                                  |    bind-protocol = "tcp"
@@ -43,10 +43,10 @@ checkBundleConf := {
 
   val debitContent = IO.read((target in debitImpl in Bundle).value / "bundle" / "tmp" / "bundle.conf").indent
   val expectedDebitContent = """|endpoints = {
-                                |  "payment" = {
+                                |  "debitservice" = {
                                 |    bind-protocol = "http"
                                 |    bind-port     = 0
-                                |    services      = ["http://:9000/debit?preservePath"]
+                                |    services      = ["http://:9000/debitservice", "http://:9000/debit?preservePath"]
                                 |  },
                                 |  "akka-remote" = {
                                 |    bind-protocol = "tcp"

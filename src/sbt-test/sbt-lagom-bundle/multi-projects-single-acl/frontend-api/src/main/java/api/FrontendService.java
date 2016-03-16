@@ -15,7 +15,7 @@ public interface FrontendService extends Service {
 
   @Override
   default Descriptor descriptor() {
-    return named("/frontend").with(
+    return named("frontendservice").with(
       restCall(Method.GET,  "/foo", foo())
     ).withAutoAcl(true);
   }
