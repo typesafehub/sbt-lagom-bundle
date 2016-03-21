@@ -13,7 +13,7 @@ The declared descriptor names are automatically extracted from the Lagom service
 1. Add the plugin to the `plugins.sbt`:
 
     ```scala
-    addSbtPlugin("com.typesafe.sbt" % "sbt-lagom-bundle" % "1.0.2")
+    addSbtPlugin("com.typesafe.sbt" % "sbt-lagom-bundle" % "1.0.3")
     ```
 2. Ensure your service implementation projects have enabled the `LagomJava` sbt plugin:  
 
