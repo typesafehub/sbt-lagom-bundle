@@ -12,7 +12,7 @@ object LagomBundleImport {
 
     val conductrBundleLibVersion = SettingKey[String](
       "lagom-bundle-conductr-bundle-lib-version",
-      "The version of conductr-bundle-lib to depend on. Defaults to 1.4.1"
+      "The version of conductr-bundle-lib to depend on. Defaults to 1.4.2"
     )
 
     val endpointsPort = SettingKey[Int](
