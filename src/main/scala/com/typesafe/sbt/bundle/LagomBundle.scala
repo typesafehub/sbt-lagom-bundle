@@ -38,7 +38,7 @@ object LagomBundle extends AutoPlugin {
       endpointsPort := 9000,
       ivyConfigurations += apiToolsConfig,
       // scalaBinaryVersion.value uses the binary compatible scala version from the Lagom project
-      conductrBundleLibVersion := "1.4.1",
+      conductrBundleLibVersion := "1.4.2",
       libraryDependencies ++= Seq(
         LagomImport.component("api-tools") % apiToolsConfig,
         "com.typesafe.conductr" % s"lagom10-conductr-bundle-lib_${scalaBinaryVersion.value}" % conductrBundleLibVersion.value

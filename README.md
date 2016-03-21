@@ -32,7 +32,7 @@ The following settings are available via `LagomBundleKeys`:
 
 Setting                  | Description
 -------------------------|------------
-conductrBundleLibVersion | The version of conductr-bundle-lib to depend on. Defaults to 1.4.1.
+conductrBundleLibVersion | The version of conductr-bundle-lib to depend on. Defaults to 1.4.2.
 endpointsPort            | Declares the port for each service endpoint that gets exposed to the outside world, e.g. http://:9000/myservice. Defaults to 9000.
     
 ## Advanced Usage
