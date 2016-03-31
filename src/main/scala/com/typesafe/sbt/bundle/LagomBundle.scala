@@ -32,6 +32,7 @@ object LagomBundle extends AutoPlugin {
 
   override def projectSettings =
     bundleSettings(Bundle) ++ Seq(
+      BundleKeys.bundleConfVersion := BundleConfVersions.V_1_2_0,
       BundleKeys.nrOfCpus := 1.0,
       BundleKeys.memory := 128.MiB,
       BundleKeys.diskSpace := 200.MB,
@@ -203,8 +204,13 @@ object LagomBundle extends AutoPlugin {
     def toEndpoint(serviceNameAndPath: (String, Seq[String])): (String, Endpoint) =
       serviceNameAndPath match {
         case (serviceName, pathBegins) =>
-          val uris = pathBegins.map(p => URI(s"http://:$servicePort$p")).to[ListSet] // ListSet makes it easier to test
-          serviceName -> Endpoint("http", services = uris + URI(s"http://:$servicePort/$serviceName") )
+          val endpoint = if (pathBegins.nonEmpty) {
+            val pathBeginAcls = pathBegins.map(pathBegin => Http.Request(None, Right(s"^$pathBegin".r), None))
+            Endpoint("http", 0, serviceName, RequestAcl(Http(pathBeginAcls: _*)))
+          } else
+            Endpoint("http", 0)
+
+          serviceName -> endpoint
       }
     def mergeEndpoint(endpoints: Map[String, Endpoint], endpoint: (String, Endpoint)): Map[String, Endpoint] =
       endpoint match {
@@ -231,7 +237,7 @@ object LagomBundle extends AutoPlugin {
         .map(_.as[String])
         .collect {
           case pathBeginExtractor(pathBegin) =>
-            (if (pathBegin.endsWith("/")) pathBegin.dropRight(1) else pathBegin) + "?preservePath"
+            if (pathBegin.endsWith("/")) pathBegin.dropRight(1) else pathBegin
         }
       pathlessServiceName -> pathBegins
     }
