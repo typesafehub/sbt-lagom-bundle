@@ -179,7 +179,7 @@ object LagomBundle extends AutoPlugin {
         // Lookup Lagom services
         val servicesAsString = ServiceDetector.services(classLoader)
         // Convert services string to `Map[String, Endpoint]`
-        toConductrEndpoints(servicesAsString, (endpointsPort in config).value)
+        toConductrEndpoints(servicesAsString)
       }
     }
   }
@@ -200,7 +200,7 @@ object LagomBundle extends AutoPlugin {
   /**
     * Convert services string to `Map[String, Endpoint]` by using the Play json library
     */
-  private def toConductrEndpoints(services: String, servicePort: Int): Map[String, Endpoint] = {
+  private def toConductrEndpoints(services: String): Map[String, Endpoint] = {
     def toEndpoint(serviceNameAndPath: (String, Seq[String])): (String, Endpoint) =
       serviceNameAndPath match {
         case (serviceName, pathBegins) =>
