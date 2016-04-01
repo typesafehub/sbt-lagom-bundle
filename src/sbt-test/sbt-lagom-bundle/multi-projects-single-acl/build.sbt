@@ -31,7 +31,18 @@ checkBundleConf := {
                                    |  "frontendservice" = {
                                    |    bind-protocol = "http"
                                    |    bind-port     = 0
-                                   |    services      = ["http://:9000/frontendservice", "http://:9000/foo?preservePath"]
+                                   |    service-name  = "frontendservice"
+                                   |    acls          = [
+                                   |      {
+                                   |        http = {
+                                   |          requests = [
+                                   |            {
+                                   |              path-beg = "/foo"
+                                   |            }
+                                   |          ]
+                                   |        }
+                                   |      }
+                                   |    ]
                                    |  },
                                    |  "akka-remote" = {
                                    |    bind-protocol = "tcp"
