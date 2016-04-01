@@ -9,7 +9,6 @@ import com.typesafe.sbt.SbtNativePackager
 import sbt._
 import sbt.Keys._
 import play.api.libs.json._
-import scala.collection.immutable.ListSet
 import scala.reflect.ClassTag
 import scala.util.{Success, Failure, Try}
 import sbt.Resolver.bintrayRepo
@@ -205,7 +204,14 @@ object LagomBundle extends AutoPlugin {
       serviceNameAndPath match {
         case (serviceName, pathBegins) =>
           val endpoint = if (pathBegins.nonEmpty) {
-            val pathBeginAcls = pathBegins.map(pathBegin => Http.Request(None, Right(s"^$pathBegin".r), None))
+            val pathBeginAcls = pathBegins
+              .distinct
+              .map {
+                case emptyPath @ "" =>
+                  Http.Request(None, Right("^/".r), None)
+                case pathBegin =>
+                  Http.Request(None, Right(s"^$pathBegin".r), None)
+              }
             Endpoint("http", 0, serviceName, RequestAcl(Http(pathBeginAcls: _*)))
           } else
             Endpoint("http", 0)
@@ -224,7 +230,15 @@ object LagomBundle extends AutoPlugin {
                   case (None              , Some(newServices)) => Some(newServices)
                   case (None              , None)              => None
                 }
-                prevEndpoint.copy(services = mergedServices)
+
+                val mergedRequestAcl = (prevEndpoint.acls, endpoint.acls) match {
+                  case (Some(prevAcls), Some(newAcls)) => Some(prevAcls ++ newAcls)
+                  case (Some(prevAcls), None)          => Some(prevAcls)
+                  case (None          , Some(newAcls)) => Some(newAcls)
+                  case (None          , None)          => None
+                }
+
+                prevEndpoint.copy(services = mergedServices, acls = mergedRequestAcl)
               }
           endpoints + (serviceName -> mergedEndpoint)
       }
