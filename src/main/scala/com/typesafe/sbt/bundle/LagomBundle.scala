@@ -214,7 +214,7 @@ object LagomBundle extends AutoPlugin {
               }
             Endpoint("http", 0, serviceName, RequestAcl(Http(pathBeginAcls: _*)))
           } else
-            Endpoint("http", 0)
+            Endpoint("http", 0, serviceName)
 
           serviceName -> endpoint
       }
