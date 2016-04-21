@@ -2,6 +2,8 @@
 
 [![Build Status](https://api.travis-ci.org/typesafehub/sbt-lagom-bundle.png?branch=master)](https://travis-ci.org/typesafehub/sbt-lagom-bundle)
 
+# This plugin has been replaced by [sbt-conductr](https://github.com/typesafehub/sbt-conductr). Please use this instead.
+
 ## Introduction
 
 A plugin that uses [sbt-bundle](https://github.com/sbt/sbt-bundle) to produce a ConductR bundle for Lagom.
